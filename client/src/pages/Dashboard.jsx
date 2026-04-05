@@ -31,7 +31,7 @@ const navigate=useNavigate();
   const createResume= async(event)=>{
     event.preventDefault();
     setShowCreateResume(false);
-    navigate(`/app/builder/:res123`)
+    navigate(`/app/builder/res123`)
   }
 
  
