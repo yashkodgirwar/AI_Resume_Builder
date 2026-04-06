@@ -5,6 +5,8 @@ import { FilePenLineIcon } from 'lucide-react';
 import { TrashIcon, PencilIcon } from 'lucide-react';
 
 import { useNavigate } from 'react-router-dom';
+import { UploadCloud } from 'lucide-react';
+
 
 
 
@@ -33,11 +35,28 @@ const navigate=useNavigate();
     setShowCreateResume(false);
     navigate(`/app/builder/res123`)
   }
-
- 
+  
+  const uploadResume= async(event)=>{
+    event.preventDefault();
+    setShowUploadResume(false);
+    navigate(`/app/builder/res123`)
+  }
+  const editTitle= async(event)=>{
+    event.preventDefault();
+    setEditResumeId('');
+   
+  }
+  const deleteResume= async(resumeId)=>{
+    const confirmDelete= window.confirm("Are you sure you want to delete this resume?");
+    if(confirmDelete){
+      // call api to delete resume
+      setAllResumes(prev=> prev.filter(resume=> resume._id !== resumeId));
+    }
+    
+  }
   return (
     <div>
-     <div className='"max-w-7xl mx-auto px-4 py-8"'>
+     <div className="max-w-7xl mx-auto px-4 py-8">
           <p className="text-2xl font-medium mb-6 bg-gradient-to-r from-slate-600 to-slate-700 bg-clip-text text-transparent sm:hidden">
         Welcome, Joe Doe
       </p>
@@ -53,7 +72,7 @@ const navigate=useNavigate();
           </p>
         </button>
 
-          <button
+          <button onClick={()=> setShowUploadResume(true)}
           className="w-full bg-white sm:max-w-36 h-48 flex flex-col items-center justify-center rounded-lg gap-2 text-slate-600 border border-dashed border-slate-300 group hover:border-purple-500 hover:shadow-lg transition-all duration-300 cursor-pointer mt-4"
         >
           <UploadCloudIcon
@@ -69,8 +88,8 @@ const navigate=useNavigate();
 {allResumes.map((resume,index)=>{
   const baseColor=colors[index%colors.length];
       return (
-    <button
-      key={index}
+    <button key={index} onClick={()=> navigate(`/app/builder/${resume._id}`)}
+      
       className="relative w-full sm:max-w-36 h-48 flex flex-col items-center justify-center rounded-lg gap-2 border group hover:shadow-lg transition-all duration-300 cursor-pointer"
       style={{
         background: `linear-gradient(135deg, ${baseColor}10, ${baseColor}40)`,
@@ -92,9 +111,13 @@ const navigate=useNavigate();
       >
         Updated on: {new Date(resume.updatedAt).toLocaleDateString()}
       </p>
-       <div className="absolute top-1 right-1 hidden group-hover:flex items-center gap-1">
-        <TrashIcon className="size-7 p-1.5 hover:bg-white/50 rounded text-slate-700 transition-colors" />
-        <PencilIcon className="size-7 p-1.5 hover:bg-white/50 rounded text-slate-700 transition-colors" />
+       <div onClick={(e)=> e.stopPropagation()} className="absolute top-1 right-1 hidden group-hover:flex items-center gap-1">
+        <TrashIcon onClick={(e)=> deleteResume(resume._id)} className="size-7 p-1.5 hover:bg-white/50 rounded text-slate-700 transition-colors" />
+        <PencilIcon onClick={(e)=> {
+          
+          setEditResumeId(resume._id);
+          setTitle(resume.title);
+        }} className="size-7 p-1.5 hover:bg-white/50 rounded text-slate-700 transition-colors" />
       </div>
     </button>
   );
@@ -106,12 +129,63 @@ const navigate=useNavigate();
     <div className='relative bg-slate-50 border shadow-md rounded-lg w-full max-w-sm p-6' onClick={e=>e.stopPropagation()}>
       <h2 className='text-xl font-bold mb-4'>Create a Resume</h2>
      
-      <input type="text" placeholder=" enter Resume Title"  className='w-full px-4 py-2 mb-4 focus:border-green-600 ring-green-600' required  />
+      <input onChange={(e)=>setTitle(e.target.value)}  value={title} type="text" placeholder=" enter Resume Title"  className='w-full px-4 py-2 mb-4 focus:border-green-600 ring-green-600' required  />
       <button type='submit' className='w-full py-2 bg-green-600 text-white rounded hover:bg-green-700 transition-colors' 
       >
         Create Resume
         </button>
         <XIcon  className='absolute top-4 right-4 size-5 text-slate-500 hover:text-slate-600 cursor-pointer transition-colors' onClick={()=> {setShowCreateResume(false), setTitle('')}} />
+      
+    </div>
+
+  </form>
+ )}
+ {
+  showUploadResume && (
+    <form onSubmit={uploadResume} onClick={()=> setShowUploadResume(false)} className='fixed inset-0 bg-black/70 backdrop-blur bg-opacity-50 z-10 flex items-center justify-center'>
+    <div className='relative bg-slate-50 border shadow-md rounded-lg w-full max-w-sm p-6' onClick={e=>e.stopPropagation()}>
+      <h2 className='text-xl font-bold mb-4'>Upload a Resume</h2>
+     
+      <input  onChange={(e)=>setTitle(e.target.value)}  value={title} type="text" placeholder=" enter Resume Title"  className='w-full px-4 py-2 mb-4 focus:border-green-600 ring-green-600' required  />
+      <div>
+        <label htmlFor='resume-input' className='block text-sm text-slate-700'>Select a Resume File
+         <div className="flex flex-col items-center justify-center gap-2 border group text-slate-400 border-slate-400 border-dashed rounded-md p-4 py-10 my-4 hover:border-green-500 hover:text-green-700 cursor-pointer transition-colors">
+    {resume ? (
+      <p className="text-green-700">{resume.name}</p>
+    ) : (
+      <>
+        <UploadCloud className="size-14 stroke-1" />
+        <p>Upload resume</p>
+      </>
+    )}
+  </div>
+
+        </label>
+        <input id='resume-input' type="file" accept=".pdf" className='hidden' onChange={(e)=> setresume(e.target.files[0])} />
+      </div>
+      <button type='submit' className='w-full py-2 bg-green-600 text-white rounded hover:bg-green-700 transition-colors' 
+      >
+        Upload Resume
+        </button>
+
+        <XIcon  className='absolute top-4 right-4 size-5 text-slate-500 hover:text-slate-600 cursor-pointer transition-colors' onClick={()=> {setShowUploadResume('')}} />
+      
+    </div>
+
+  </form>
+  )
+ }
+ {editresumeId && (
+  <form onSubmit={editTitle} onClick={()=> setEditResumeId('')} className='fixed inset-0 bg-black/70 backdrop-blur bg-opacity-50 z-10 flex items-center justify-center'>
+    <div className='relative bg-slate-50 border shadow-md rounded-lg w-full max-w-sm p-6' onClick={e=>e.stopPropagation()}>
+      <h2 className='text-xl font-bold mb-4'>Edit Resume Title</h2>
+     
+      <input onChange={(e)=>setTitle(e.target.value)}  value={title} type="text" placeholder=" enter Resume Title"  className='w-full px-4 py-2 mb-4 focus:border-green-600 ring-green-600' required  />
+      <button type='submit' className='w-full py-2 bg-green-600 text-white rounded hover:bg-green-700 transition-colors' 
+      >
+        Update Title
+        </button>
+        <XIcon  className='absolute top-4 right-4 size-5 text-slate-500 hover:text-slate-600 cursor-pointer transition-colors' onClick={()=> {setEditResumeId(false), setTitle('')}} />
       
     </div>
 
