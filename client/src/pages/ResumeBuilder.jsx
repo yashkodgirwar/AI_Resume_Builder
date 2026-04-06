@@ -121,7 +121,7 @@ useEffect(()=>{
           </div>
         </div>
        { /* /right panal-preview */ }
-        <div></div>
+       <div></div>
 
 
       </div>

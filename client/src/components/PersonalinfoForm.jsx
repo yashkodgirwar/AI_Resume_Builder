@@ -11,7 +11,7 @@ const PersonalinfoForm = ({data,onChange,removeBackground, setremoveBackground})
         Personal Information
       </h3>
       <p className='text-sm text-gray-600'>
-        Get Started with the personal information
+        Get Started with the personal 
       </p>
       <div className='flex items-center gap-2'>
         <label>
