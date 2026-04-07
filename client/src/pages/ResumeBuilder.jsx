@@ -121,14 +121,29 @@ useEffect(()=>{
           </div>
         </div>
        { /* /right panal-preview */ }
-       <div></div>
+       <div>
+        <div className=''>
+          <h3 className='text-lg font-semibold text-gray-900'>
+            Resume Preview
+          </h3>
+          <p className='text-sm text-gray-600'>
+            See real time preview of your resume
+          </p>
+        </div>
+        <div className='mt-4 p-6 border rounded-lg bg-gray-50 min-h-[400px]'>
+          {/* resume preview content */ }
+          <p className='text-center text-gray-400'>Resume preview will be shown here</p>
+        </div>
+
+       </div>
+        </div>
+       </div>
 
 
       </div>
-    </div>
-    
+  
 
-    </div>
+    
   )
 }
 
