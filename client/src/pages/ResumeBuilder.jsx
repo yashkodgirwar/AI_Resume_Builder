@@ -12,6 +12,8 @@ import { ChevronLeft } from 'lucide-react';
 import { ChevronRight } from 'lucide-react';
 import PersonalinfoForm from '../components/PersonalinfoForm';
 import ResumePreview from '../components/ResumePreview';
+import TemplateSelector from '../components/TemplateSelector';
+import ColorPicker from '../components/ColorPicker';
 
 const ResumeBuilder = () => {
   const {resumeId}= useParams();
@@ -79,7 +81,11 @@ useEffect(()=>{
             <hr className='absolute top-0 left-0 h-1 bg-gradient-to-r from-green-500 to-green-600 border-none transition-all duration-2000' style={{width: `${((activeSectionIndex+1)*100)/(section.length-1)}%` }} />
             {/* section Navigation */ }
             <div className='flex justify-between items-center mb-6 border-b border-gray-300 py-1'>
-               <div>
+               <div className='flex items-center gap-2 '>
+               
+               
+                <TemplateSelector selectedTemplate={resumeData.template} onChange={(template)=>setResumeData((prev)=>({...prev, template}))} />
+                  <ColorPicker selectedColor={resumeData.accent_color} onChange={(accent_color)=>setResumeData((prev)=>({...prev, accent_color}))} />
                </div>
                <div>
 
