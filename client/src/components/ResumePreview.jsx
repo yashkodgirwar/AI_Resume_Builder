@@ -19,47 +19,44 @@ const ResumePreview = ({data,template,accent_color, classes=""}) => {
     }
 }
     return (
-    <div className='w-full bg-gray-100'>
-        <div id="resume-preview" className={"border border-gray-200 print:shadow-none print:border-none" + classes}>
-        {renderTemplate()}
-        </div>
-     <style jsx>{`
-  @page {
-    size: letter;
-    margin: 0;
-  }
-
-  @media print {
-    html, body {
-      width: 8.5in;
-      height: 11in;
-      overflow: hidden;
-    }
-
-    body * {
-      visibility: hidden;
-    }
-
-    #resume-preview, #resume-preview * {
-      visibility: visible;
-    }
-  }
-
-  #resume-preview {
-    position: absolute;
-    left: 0;
-    top: 0;
-    width: 100%;
-    height: auto;
-    margin: 0;
-    padding: 0;
-    box-shadow: none !important;
-    border: none !important;
-  }
-`}</style>
+    
+  <div className="w-full min-h-screen bg-gray-100 flex justify-center items-start py-10">
+    
+    <div className="w-[800px] bg-white shadow-lg border border-gray-200">
       
+      <div id="resume-preview" className="w-full">
+        {renderTemplate()}
+      </div>
+
     </div>
-  )
+
+    <style jsx="true">{`
+      @page {
+        size: A4;
+        margin: 0;
+      }
+
+      @media print {
+        body * {
+          visibility: hidden;
+        }
+
+        #resume-preview, #resume-preview * {
+          visibility: visible;
+        }
+
+        #resume-preview {
+          position: absolute;
+          left: 0;
+          top: 0;
+          width: 100%;
+        }
+      }
+    `}</style>
+
+  </div>
+);
+    
 }
 
 export default ResumePreview
