@@ -127,9 +127,14 @@ useEffect(()=>{
           </div>
         </div>
        { /* /right panal-preview */ }
-       <div>
-       <ResumePreview data={resumeData} template={resumeData.template} accent_color={resumeData.accent_color} classes="mx-auto" />
-       </div>
+   <div className="lg:col-span-7 flex justify-center overflow-x-auto">
+  <ResumePreview 
+    data={resumeData} 
+    template={resumeData.template} 
+    accent_color={resumeData.accent_color} 
+    classes="mx-auto" 
+  />
+</div>
 
 
       </div>

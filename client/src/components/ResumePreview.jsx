@@ -20,9 +20,10 @@ const ResumePreview = ({data,template,accent_color, classes=""}) => {
 }
     return (
     
-  <div className="w-full min-h-screen bg-gray-100 flex justify-center items-start py-10">
-    
-    <div className="w-[800px] bg-white shadow-lg border border-gray-200">
+  
+  <div className="min-w-[800px] bg-white shadow-lg border border-gray-200">
+
+    <div className="min-w-[800px] max-w-[1000px] bg-white shadow-lg border border-gray-200">
       
       <div id="resume-preview" className="w-full">
         {renderTemplate()}
@@ -56,6 +57,7 @@ const ResumePreview = ({data,template,accent_color, classes=""}) => {
 
   </div>
 );
+
     
 }
 
