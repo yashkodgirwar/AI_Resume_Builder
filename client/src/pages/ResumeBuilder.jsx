@@ -16,6 +16,8 @@ import TemplateSelector from '../components/TemplateSelector';
 import ColorPicker from '../components/ColorPicker';
 import ProfessionalSummaryForm from '../components/ProfessionalSummaryForm';
 import ExperienceForm from '../components/ExperienceForm';
+import EducationInfo from '../components/EducationInfo';
+
 const ResumeBuilder = () => {
   const {resumeId}= useParams();
   const [resumeData,setResumeData]= useState({
@@ -128,6 +130,10 @@ useEffect(()=>{
                 {activeSection.id === 'experience' && (
                   <ExperienceForm data={resumeData.experience} onChange={(data)=>setResumeData((prev)=>({...prev, experience: data}))} />
                 )}
+                  {activeSection.id === 'education' && (
+                    <EducationInfo data={resumeData.education} onChange={(data)=>setResumeData((prev)=>({...prev, education: data}))} />
+                  )}
+
               {/* Add similar conditional rendering for other sections like experience, education, projects, skills */}
             </div>
 
