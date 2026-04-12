@@ -72,7 +72,26 @@ useEffect(()=>{
   loadExitingResume();
 },[resumeId])
 
+const changeResumeVisibilty=async()=>{
+  setResumeData({...resumeData, public: !resumeData.public});
+}
 
+const handleshare=()=>{
+  const frontendUrl= window.location.href.split('/app')[0];
+  const resumeUrl=frontendUrl+ '/view/'+ resumeData._id;
+  if(navigator.share){
+    navigator.share({
+     
+      url: resumeUrl,
+      text: `Check out my resume: ${resumeData.title}`,
+    })
+  }  else{
+   alert("Sharing not supported in this browser");
+    }
+  }
+  const Downloadresume=()=>{
+    window.print();
+  }
   return (
     <div>
     <div className="max-w-7xl mx-auto px-4 py-8">
@@ -164,19 +183,19 @@ Save Changes
           className="flex items-center p-2 px-4 gap-2 text-xs
                      bg-gradient-to-br from-blue-100 to-blue-200 text-blue-600
                      rounded-lg ring-blue-300 hover:ring transition-colors"
-        >
-          <Share2Icon className="size-4" />
+          onClick={handleshare}>
+          <Share2Icon className="size-4" /> Share
         </button>
       )}
 
-      <button className='flex items-center p-2 px-4 gap-2 text-xs
+      <button  onClick={changeResumeVisibilty} className='flex items-center p-2 px-4 gap-2 text-xs
 bg-gradient-to-br from-purple-100 to-purple-200 text-purple-600
 ring-purple-300 rounded-1g hover:ring transition-colors'>
 {resumeData.public ? <EyeIcon className="size-4"/> :
 <EyeOffIcon className="size-4"/>}
 {resumeData.public ? 'Public' : 'Private'}
 </button>
-      <button className='flex items-center gap-2 px-6 py-2 text-xs
+      <button  onClick={Downloadresume} className='flex items-center gap-2 px-6 py-2 text-xs
 bg-gradient-to-br from-green-100 to-green-200 text-green-600
 rounded-lg ring-green-300 hover:ring transition-colors'>
 <DownloadIcon className='size-4'/> Download
