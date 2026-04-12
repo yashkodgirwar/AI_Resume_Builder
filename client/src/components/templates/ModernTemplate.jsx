@@ -94,34 +94,44 @@ const ModernTemplate = ({ data, accentColor }) => {
 					</section>
 				)}
 
-				{/* Projects */}
-				{data.project && data.project.length > 0 && (
-					<section className="mb-8">
-						<h2 className="text-2xl font-light mb-4 pb-2 border-b border-gray-200">
-							Projects
-						</h2>
+				{data.projects && data.projects.length > 0 && (
+  <section className="mb-8">
+    <h2 className="text-2xl font-light mb-4 pb-2 border-b border-gray-200">
+      Projects
+    </h2>
 
-						<div className="space-y-6">
-							{data.project.map((p, index) => (
-								<div key={index} className="relative pl-6 border-l border-gray-200" style={{borderLeftColor: accentColor}}>
+    <div className="space-y-6">
+      {data.projects.map((p, index) => (
+        <div 
+          key={index} 
+          className="relative pl-6 border-l border-gray-200" 
+          style={{ borderLeftColor: accentColor }}
+        >
 
+          {/* Project Name */}
+          <h3 className="text-lg font-medium text-gray-900">
+            {p.name}
+          </h3>
 
-									<div className="flex justify-between items-start">
-										<div>
-											<h3 className="text-lg font-medium text-gray-900">{p.name}</h3>
-										</div>
-									</div>
-									{p.description && (
-										<div className="text-gray-700 leading-relaxed text-sm mt-3">
-											{p.description}
-										</div>
-									)}
-								</div>
-							))}
-						</div>
-					</section>
-				)}
+          {/* ✅ ADD THIS (Project Type) */}
+          {p.type && (
+            <p className="text-xs mt-1 px-2 py-1 inline-block bg-gray-200 rounded">
+              {p.type}
+            </p>
+          )}
 
+          {/* Description */}
+          {p.description && (
+            <div className="text-gray-700 leading-relaxed text-sm mt-3">
+              {p.description}
+            </div>
+          )}
+
+        </div>
+      ))}
+    </div>
+  </section>
+)}
 				<div className="grid sm:grid-cols-2 gap-8">
 					{/* Education */}
 					{data.education && data.education.length > 0 && (

@@ -67,23 +67,44 @@ const MinimalTemplate = ({ data, accentColor }) => {
                 </section>
             )}
 
-            {/* Projects */}
-            {data.project && data.project.length > 0 && (
-                <section className="mb-10">
-                    <h2 className="text-sm uppercase tracking-widest mb-6 font-medium" style={{ color: accentColor }}>
-                        Projects
-                    </h2>
+          {data.projects && data.projects.length > 0 && (
+  <section className="mb-8">
+    <h2 className="text-2xl font-light mb-4 pb-2 border-b border-gray-200">
+      Projects
+    </h2>
 
-                    <div className="space-y-4">
-                        {data.project.map((proj, index) => (
-                            <div key={index} className="flex flex-col gap-2 justify-between items-baseline">
-                                <h3 className="text-lg font-medium ">{proj.name}</h3>
-                                <p className="text-gray-600">{proj.description}</p>
-                            </div>
-                        ))}
-                    </div>
-                </section>
-            )}
+    <div className="space-y-6">
+      {data.projects.map((p, index) => (
+        <div 
+          key={index} 
+          className="relative pl-6 border-l border-gray-200" 
+          style={{ borderLeftColor: accentColor }}
+        >
+
+          {/* Project Name */}
+          <h3 className="text-lg font-medium text-gray-900">
+            {p.name}
+          </h3>
+
+          {/* ✅ ADD THIS (Project Type) */}
+          {p.type && (
+            <p className="text-xs mt-1 px-2 py-1 inline-block bg-gray-200 rounded">
+              {p.type}
+            </p>
+          )}
+
+          {/* Description */}
+          {p.description && (
+            <div className="text-gray-700 leading-relaxed text-sm mt-3">
+              {p.description}
+            </div>
+          )}
+
+        </div>
+      ))}
+    </div>
+  </section>
+)}
 
             {/* Education */}
             {data.education && data.education.length > 0 && (
