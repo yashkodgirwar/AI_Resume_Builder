@@ -33,7 +33,7 @@ export const registerUser = async (req, res) => {
             })
             //return success response
             const token=gerneateToken(newUser._id);
-            newUser.password=undefined;
+            newUser.password=undefined; 
             return res.status(201).json({
                 message: "User registered successfully",
                 token,
