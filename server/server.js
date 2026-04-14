@@ -1,5 +1,5 @@
-import 'dotenv/config';   // 👈 BEST FIX (auto load before anything)
- // 👈 bas itna hi kaafi hai
+import 'dotenv/config'; 
+
 
 console.log("ENV TEST:", process.env.IMAGEKIT_PRIVATE_KEY);
 
@@ -9,13 +9,7 @@ import connectDB from './configs/db.js';
 import userRouter from './routes/userroutes.js';
 import resumeRouter from './routes/resumeroutes.js';
 import aiRouter from './routes/airoutes.js';
-// import express from 'express';
-// import cors from 'cors';
-// import dotenv from 'dotenv';
-// import connectDB from './configs/db.js';
-// import userRouter from './routes/userroutes.js';
-// import resumeRouter from './routes/resumeroutes.js';
-// import aiRouter from './routes/airoutes.js'
+
 
 
 
