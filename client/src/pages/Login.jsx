@@ -1,7 +1,12 @@
 import React from "react";
 import { Mail, User2Icon, Lock } from "lucide-react";
+import api from "../configs/api";
+import { useDispatch } from "react-redux";
+import toast from "react-hot-toast";
+
 
 const Login = () => {
+  const dispatch=useDispatch()
   const query = new URLSearchParams(window.location.search);
   const urlState = query.get("state");
   const [state, setState] = React.useState(urlState || "login");
@@ -17,9 +22,17 @@ const Login = () => {
     setFormData((prev) => ({ ...prev, [name]: value }));
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-  };
+    try{
+      const {data}  = await api.post(`/api/users/${state}`,formData)
+      dispatch(login(data))
+      localStorage.setItem('token',data.token)
+      toast.success(data.message)
+    }catch(error){
+          toast(error?.response?.data?.message || error.message)
+    }
+  }
 
   return (
     <div className="min-h-screen flex items-center justify-center relative overflow-hidden bg-gradient-to-r from-green-200 via-white to-green-100 animate-gradient">
@@ -45,7 +58,7 @@ const Login = () => {
               type="text"
               name="name"
               placeholder="Name"
-              className="w-full bg-transparent outline-none text-gray-700"
+            className="w-full bg-transparent outline-none border-none text-gray-700"
               value={formData.name}
               onChange={handleChange}
               required
