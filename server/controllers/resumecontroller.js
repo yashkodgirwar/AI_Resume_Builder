@@ -88,7 +88,7 @@ const userId = req.userId;
 const {resumeId, resumeData, removeBackground} = req.body
 const image = req.file;
 
-let resumeDataCopy = JSON.parse(resumeData);
+let resumeDataCopy = JSON.parse(JSON.stringify(resumeData));
 
 if(image){
     const imageBufferdata=fs.createReadStream(image.path);
