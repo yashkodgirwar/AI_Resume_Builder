@@ -1,12 +1,12 @@
-import express from "express"
-import { enhanceJobDescription, enhanceProfessionalSummary } from "../controllers/aicontroller";
-import { updateResume } from "../controllers/resumecontroller";
-import ai from "../configs/ai";
+import express from "express";
+import { enhanceJobDescription, enhanceProfessionalSummary, uploadresume } from "../controllers/aicontroller.js";
 
-const aiRouter= express.Router;
+import  protect  from "../middlewares/authMiddleware.js"; // make sure protect is imported
 
-aiRouter.post('/enhance-pro-sum',protect,enhanceProfessionalSummary);
-aiRouter.post('/enhance-job-desc',protect,enhanceJobDescription);
-aiRouter.post('/upload-resume',protect,updateResume);
+const aiRouter = express.Router();
 
-export default aiRouter
+aiRouter.post("/enhance-pro-sum", protect, enhanceProfessionalSummary);
+aiRouter.post("/enhance-job-desc", protect, enhanceJobDescription);
+aiRouter.post("/upload-resume", protect, uploadresume);
+
+export default aiRouter;

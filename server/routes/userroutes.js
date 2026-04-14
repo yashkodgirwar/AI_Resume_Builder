@@ -1,7 +1,7 @@
 import express from "express";
 import { getUserById, loginUser,registerUser ,getUserResume} from "../controllers/usercontroller.js";
 import { get } from "mongoose"; 
-import { protect } from "../middlewares/authMiddleware.js";
+import protect  from "../middlewares/authMiddleware.js";
 
 
 const userRouter = express.Router();

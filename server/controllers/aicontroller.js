@@ -1,8 +1,9 @@
 
 
-import { useContext } from "react";
+
 import Resume from "../models/Resume.js"
 import ai from "../configs/ai.js"
+
 //controller for enhancing resume summary
 //POST:/api/ai/enhance-pro-sum
 export const enhanceProfessionalSummary=async(req,res)=>{
@@ -19,7 +20,7 @@ export const enhanceProfessionalSummary=async(req,res)=>{
         },
         {
             role: "user",
-            content: useContext,
+            content: userContent,
         },
     ],
         })
@@ -46,7 +47,7 @@ export const enhanceJobDescription =async(req,res)=>{
         },
         {
             role: "user",
-            content: useContext,
+            content: useContent,
         },
     ],
         })
@@ -60,7 +61,6 @@ export const enhanceJobDescription =async(req,res)=>{
 //controller for uploading a resume to the database
 
 //POST:/api/ai/upload-resume
-
 export const uploadresume  =async(req,res)=>{
     try{
         const {resumeText,title}=req.body;

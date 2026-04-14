@@ -1,7 +1,13 @@
-import ImageKit from '@imagekit/nodejs';
 
-const client = new ImageKit({
+
+
+import ImageKit from '@imagekit/nodejs';
+console.log("PRIVATE KEY:", process.env.IMAGEKIT_PRIVATE_KEY); // 👈 debug
+
+const imagekit = new ImageKit({
+ 
   privateKey: process.env.IMAGEKIT_PRIVATE_KEY,
+
 });
 
-export default ImageKit;
+export default imagekit;
