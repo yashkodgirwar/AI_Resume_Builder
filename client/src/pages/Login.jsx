@@ -3,7 +3,7 @@ import { Mail, User2Icon, Lock } from "lucide-react";
 import api from "../configs/api";
 import { useDispatch } from "react-redux";
 import toast from "react-hot-toast";
-import { login } from "../app/features/authSlice.js"; 
+import { login } from "../app/features/authSlice.js"; // ✅ ADD THIS
 
 
 
