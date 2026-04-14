@@ -6,14 +6,15 @@ import { TrashIcon, PencilIcon } from 'lucide-react';
 
 import { useNavigate } from 'react-router-dom';
 import { UploadCloud } from 'lucide-react';
-
-
-
-
+import { useSelector } from 'react-redux';
+import toast from 'react-hot-toast';
+import {pdftoText}  from 'react-pdftotext'
+import api from "../configs/api"
 
 
 const Dashboard = () => {
-const navigate=useNavigate();
+  
+const { user, token } = useSelector(state => state.auth)
   const colors=["#9333ea", "#e0b011", "#dc2626", "#3028c7","#16a34a","#2563eb","#db2777","#ea580c","#059669","#0ea5e9"];
   const[allResumes,setAllResumes]=React.useState([]);
     const[showCreateResume,setShowCreateResume]=React.useState(false);
@@ -22,24 +23,59 @@ const navigate=useNavigate();
       const[resume,setresume]=useState(null); 
       const[editresumeId,setEditResumeId]=useState('');
 
+      const [isLoading,setisLoading]=useState(false)
+const navigate=useNavigate();
  useEffect(()=>{
     loadAllResumes();
   },[])
 
   const loadAllResumes= async()=>{
-    setAllResumes(dummyResumeData)
+    try{
+       const {data} =await api.get('/api/users/resumes', {headers: {
+      Authorization: `Bearer ${token}` }})
+      setAllResumes(data.resumes)
+
+    }catch(error){
+           toast.error(error?.response?.data.message || error.message)
+
+    }
   }
 
   const createResume= async(event)=>{
-    event.preventDefault();
-    setShowCreateResume(false);
-    navigate(`/app/builder/res123`)
-  }
+    try{
+     event.preventDefault()
+     const {data} =await api.post('/api/ai/upload-resume', {title} ,{headers: {
+      Authorization: `Bearer ${token}` }})
+      setAllResumes([...allResumes,data.resume])
+      setTitle('')
+      setShowCreateResume(false)
+      navigate(`/app/builder/${data.resume._id}`)
+
+     
+    }catch(error){
+      toast.error(error?.response?.data.message || error.message)
+
+    }
+}
   
   const uploadResume= async(event)=>{
-    event.preventDefault();
-    setShowUploadResume(false);
-    navigate(`/app/builder/res123`)
+    event.preventDefault()
+    setisLoading(true)
+    try{
+      const resumeText =await pdftoText(resume)
+      const {data} =await api.post('/api/resumes/create', {title,resumeText} ,{headers: {
+      Authorization: `Bearer ${token}` }})
+      setTitle('')
+      setresume(null)
+      setShowUploadResume(false)
+      navigate(`/app/builder/${data.resumeId}`)
+    
+    }catch(error){
+     setisLoading(false)
+     toast.error(error?.response?.data.message || error.message)
+
+
+    }
   }
   const editTitle= async(event)=>{
     event.preventDefault();
@@ -104,7 +140,7 @@ const navigate=useNavigate();
         className="text-sm group-hover:scale-105 transition-all px-2 text-center"
         style={{ color: baseColor }}
       >
-        {resume.title}
+       {resume?.title || "Untitled"}
       </p>
       <p className="absolute bottom-1 text-[11px] text-slate-400 group-hover:text-slate-500 transition-all duration-300 px-2 text-center"
         style={{ color: baseColor + '90' }}
