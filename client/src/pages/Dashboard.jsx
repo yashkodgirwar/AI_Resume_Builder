@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react'
-import { PlusIcon, UploadCloudIcon, X, XIcon } from 'lucide-react'
+import { LoaderCircleIcon, PlusIcon, UploadCloudIcon, X, XIcon } from 'lucide-react'
 import { dummyResumeData } from '../assets/assets';
 import { FilePenLineIcon } from 'lucide-react';
 import { TrashIcon, PencilIcon } from 'lucide-react';
@@ -78,17 +78,38 @@ const navigate=useNavigate();
     }
   }
   const editTitle= async(event)=>{
-    event.preventDefault();
-    setEditResumeId('');
+    try{
+        event.preventDefault();
+        const {data} =await api.post(`/api/resumes/update` ,{resumeId:editresumeId,resumeData:{title}},{headers: {
+      Authorization: `Bearer ${token}` }})
+    setAllResumes(allResumes.map(resume => resume._id === editResumeId ?{
+      ...resume,title} :resume))
+      setTitle('')
+      setEditResumeId('')
+      toast.sucess(data.message)
+    }catch(error){
+          toast.error(error?.response?.data.message || error.message)
+                                
+    }
+    
    
   }
   const deleteResume= async(resumeId)=>{
     const confirmDelete= window.confirm("Are you sure you want to delete this resume?");
-    if(confirmDelete){
-      // call api to delete resume
-      setAllResumes(prev=> prev.filter(resume=> resume._id !== resumeId));
-    }
     
+    try{
+      if(confirmDelete){
+    
+      const {data} =await api.post(`/api/resumes/delete/${resumeId}`,{headers: {
+      Authorization: `Bearer ${token}` }})
+      setAllResumes(allResumes.filter(resume => resume._id !== resumeId))
+    toast.sucess(data.message)
+    }
+  }catch(error){
+
+     toast.error(error?.response?.data.message || error.message)
+
+  }
   }
   return (
     <div>
@@ -199,8 +220,9 @@ const navigate=useNavigate();
         </label>
         <input id='resume-input' type="file" accept=".pdf" className='hidden' onChange={(e)=> setresume(e.target.files[0])} />
       </div>
-      <button type='submit' className='w-full py-2 bg-green-600 text-white rounded hover:bg-green-700 transition-colors' 
-      >
+      <button  disabled={isLoading} type='submit' className='w-full py-2 bg-green-600 text-white rounded hover:bg-green-700 transition-colors flex item-center justify-center gap-2' 
+      > {isLoading && <LoaderCircleIcon className='animate-spin size-4 text-white'/>}
+      {isLoading ? 'Uploading...' : 'Upload Resume'}
         Upload Resume
         </button>
 
