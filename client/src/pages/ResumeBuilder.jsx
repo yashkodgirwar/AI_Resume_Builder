@@ -23,10 +23,12 @@ import EducationInfo from '../components/EducationInfo';
 import ProjectForm from '../components/ProjectForm';
 
 import YourSkill from '../components/YourSkill';
+import { useSelector } from 'react-redux';
 
 
 const ResumeBuilder = () => {
-  const {resumeId}= useParams();
+  const {resumeId}= useParams()
+  const {token} = useSelector(state=>state.auth)
   const [resumeData,setResumeData]= useState({
     _id: '',
     title: '',
@@ -41,13 +43,19 @@ const ResumeBuilder = () => {
 });
 
 const loadExitingResume= async()=>{
-  const resume=dummyResumeData.find(resume=> resume.id === resumeId);
-  if(resume){
-    setResumeData(resume);
-    document.title=resume.title;
 
-  }
+    try{
+       const {data} =await api.get('/api/resumes/get' +resumeId, {headers: {
+      Authorization: `Bearer ${token}` }})
+      setResumeData(data.resumes)
+      document.title=data.resume.title
 
+    }catch(error){
+      console.log(error)
+          
+
+    }
+  
 }
 
 
