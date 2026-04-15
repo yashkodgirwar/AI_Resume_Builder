@@ -81,7 +81,19 @@ useEffect(()=>{
 },[resumeId])
 
 const changeResumeVisibilty=async()=>{
-  setResumeData({...resumeData, public: !resumeData.public});
+  try{
+    const formData =new FormData()
+    formData.append("resumeId", resumeId)
+    formData.append("resumeData" ,JSON.stringify({publicc: !resumeData.public}))
+    const {data} =await api.p('/api/resumes/update' +resumeId, {headers: {
+      Authorization: `Bearer ${token}` }})
+      setResumeData({...resumeData,public: !resumeData.public})
+      toast.success(data.message)
+
+  }catch(error){
+    console.error("Error saving resume :",error)
+
+  }
 }
 
 const handleshare=()=>{
