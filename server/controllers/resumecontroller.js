@@ -25,9 +25,16 @@ export const createResume = async(req,res)=>{
 export const deleteResume = async(req,res)=>{
     try{
         const userId=req.userId;
-        const{resumeId}=req.body;
+        const{resumeId}=req.params;
 
-        await Resume.findOneAndDelete({userId,_id: resumeId})
+       const deleted = await Resume.findOneAndDelete({
+  userId,
+  _id: resumeId
+});
+
+if (!deleted) {
+  return res.status(404).json({ message: "Resume not found" });
+}
         
       
         //retrun success message
@@ -88,7 +95,13 @@ const userId = req.userId;
 const {resumeId, resumeData, removeBackground} = req.body
 const image = req.file;
 
-let resumeDataCopy = JSON.parse(JSON.stringify(resumeData));
+let resumeDataCopy;
+if(typeof resumeData ==='string'){
+   resumeData=await JSON.parse(resumeData)
+}else{
+  resumeDataCopy=structuredClone(resumeData) // for deep copy
+}
+
 
 if(image){
     const imageBufferdata=fs.createReadStream(image.path);
