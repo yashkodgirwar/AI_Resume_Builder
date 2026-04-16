@@ -5,22 +5,19 @@
     font-family: "Outfit", sans-serif;
 
 }
-@layer base {
+/* @layer base {
     button {
         @apply cursor-pointer;
     }
    input:not([type="checkbox"]) {
   @apply outline-none border border-gray-300 focus:ring focus:ring-blue-500 focus:border-blue-500 rounded-lg;
-}
+} */
 
 /* Apply styles to textareas */
 textarea {
   @apply outline-none border border-gray-300 focus:ring focus:ring-blue-500 focus:border-blue-500 rounded-lg resize-none;
 }
 
-}
-input:-webkit-autofill {
-  -webkit-box-shadow: 0 0 0 1000px white inset !important;
-  -webkit-text-fill-color: #374151 !important;
-}
+
+
 

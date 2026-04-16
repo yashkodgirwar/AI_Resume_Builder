@@ -69,7 +69,7 @@ const Login = () => {
         )}
 
         {/* Email */}
-        <div className="flex items-center mt-4 w-full border border-gray-300 focus-within:ring-2 focus-within:ring-green-400 h-12 rounded-full px-4 gap-2">
+        <div className="flex items-center mt-4 w-full border border-gray-300  h-12 rounded-full px-4 gap-2">
           <Mail size={18} className="text-gray-400" />
           <input
             type="email"
