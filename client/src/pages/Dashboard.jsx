@@ -27,7 +27,7 @@ const { user, token } = useSelector(state => state.auth)
 const navigate=useNavigate();
  useEffect(()=>{
     loadAllResumes();
-  },[])
+  },[token])
 
   const loadAllResumes= async()=>{
     try{
