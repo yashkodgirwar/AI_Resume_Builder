@@ -44,13 +44,24 @@ const navigate=useNavigate();
   const createResume= async(event)=>{
     try{
      event.preventDefault()
-     const {data} =await api.post('/api/resumes/create', {title} ,{headers: {
-      Authorization: `Bearer ${token}` }})
-      setAllResumes([...allResumes,data.resume])
-      setTitle('')
-      setShowCreateResume(false)
-      navigate(`/app/builder/${data.resume._id}`)
+    //  const {data} =await api.post('/api/resumes/create', {title} ,{headers: {
+    //   Authorization: `Bearer ${token}` }})
+    //   setAllResumes([...allResumes,data.resume])
+    //   setTitle('')
+    //   setShowCreateResume(false)
+    //   navigate(`/app/builder/${data.resume._id}`)
+const {data} = await api.post('/api/resumes/create', {title},{
+  headers: { Authorization: `Bearer ${token}` }
+})
+console.log(data)
 
+// ✅ IMPORTANT
+setAllResumes((prev) => [...prev, data.resume])
+
+setTitle('')
+setShowCreateResume(false)
+
+navigate(`/app/builder/${data.resume._id}`)
      
     }catch(error){
       toast.error(error?.response?.data.message || error.message)
@@ -63,15 +74,26 @@ const navigate=useNavigate();
     setisLoading(true)
     try{
       const resumeText = await pdfToText.default(resume)
-    await api.post('/api/resumes/create', { title, resumeText }, {
-  headers: {
-    Authorization: `Bearer ${token}`
-  }
+//     await api.post('/api/resumes/create', { title, resumeText }, {
+//   headers: {
+//     Authorization: `Bearer ${token}`
+//   }
+// })
+//       setTitle('')
+//       setresume(null)
+//       setShowUploadResume(false)
+//       navigate(`/app/builder/${data.resumeId}`)
+const {data} = await api.post('/api/resumes/create', {title},{
+  headers: { Authorization: `Bearer ${token}` }
 })
-      setTitle('')
-      setresume(null)
-      setShowUploadResume(false)
-      navigate(`/app/builder/${data.resumeId}`)
+
+// ✅ IMPORTANT
+setAllResumes((prev) => [...prev, data.resume])
+
+setTitle('')
+setShowCreateResume(false)
+
+navigate(`/app/builder/${data.resume._id}`)
     
     }catch(error){
      setisLoading(false)

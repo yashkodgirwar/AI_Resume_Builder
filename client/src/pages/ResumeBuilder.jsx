@@ -46,9 +46,9 @@ const ResumeBuilder = () => {
 const loadExitingResume= async()=>{
 
     try{
-       const {data} =await api.get('/api/resumes/get' +resumeId, {headers: {
+       const {data} =await api.get(`/api/resumes/get/${resumeId}`, {headers: {
       Authorization: `Bearer ${token}` }})
-      setResumeData(data.resumes)
+      setResumeData(data.resume)
       document.title=data.resume.title
 
     }catch(error){
@@ -124,7 +124,7 @@ const handleshare=()=>{
 
       const formData =new FormData()
       formData.append("resumeId", resumeId)
-      formData.append('resumeData' ,JSON.stringfy(updatedResumeData))
+      formData.append('resumeData' ,JSON.stringify(updatedResumeData))
       removeBackground && formData.append("removeBackground",yes);
       typeof resumeData.personal_info.image === 'object' && formData.append("image",resumeData.personal_info.image)
           const {data} =await api.put('/api/resumes/update', formData, {headers: {
@@ -210,7 +210,7 @@ const handleshare=()=>{
                       )}
               {/* Add similar conditional rendering for other sections like experience, education, projects, skills */}
             </div>
-                   <button on click={()=>{toast.promise(saveResume,{loading:'saving'})}}className='bg-gradient-to-br from-green-100 to-green-200
+                   <button onClick={()=>{toast.promise(saveResume,{loading:'saving'})}}className='bg-gradient-to-br from-green-100 to-green-200
 ring-green-300 text-green-600 ring hover:ring-green-400
 transition-all rounded-md px-6 py-2 mt-6 text-sm'>
 Save Changes
@@ -218,48 +218,64 @@ Save Changes
           </div>
         </div>
        { /* /right panal-preview */ }
-  <div className="lg:col-span-7 max-lg:mt-6">
-  <div className="relative w-full">
-    <div className="absolute bottom-3 left-0 right-0 flex items-center justify-end gap-2">
+<div className="lg:col-span-7 max-lg:mt-6">
+  
+  {/* Buttons */}
+  <div className="relative w-full mb-4">
+    <div className="flex justify-end gap-2">
+      
       {resumeData.public && (
         <button
           className="flex items-center p-2 px-4 gap-2 text-xs
                      bg-gradient-to-br from-blue-100 to-blue-200 text-blue-600
-                     rounded-lg ring-blue-300 hover:ring transition-colors"
-          onClick={handleshare}>
+                     rounded-lg ring-blue-300 hover:ring"
+          onClick={handleshare}
+        >
           <Share2Icon className="size-4" /> Share
         </button>
       )}
 
-      <button  onClick={changeResumeVisibilty} className='flex items-center p-2 px-4 gap-2 text-xs
-bg-gradient-to-br from-purple-100 to-purple-200 text-purple-600
-ring-purple-300 rounded-1g hover:ring transition-colors'>
-{resumeData.public ? <EyeIcon className="size-4"/> :
-<EyeOffIcon className="size-4"/>}
-{resumeData.public ? 'Public' : 'Private'}
-</button>
-      <button  onClick={Downloadresume} className='flex items-center gap-2 px-6 py-2 text-xs
-bg-gradient-to-br from-green-100 to-green-200 text-green-600
-rounded-lg ring-green-300 hover:ring transition-colors'>
-<DownloadIcon className='size-4'/> Download
-</button>
+      <button
+        onClick={changeResumeVisibilty}
+        className="flex items-center p-2 px-4 gap-2 text-xs
+                   bg-gradient-to-br from-purple-100 to-purple-200 text-purple-600
+                   rounded-lg ring-purple-300 hover:ring"
+      >
+        {resumeData.public ? <EyeIcon className="size-4"/> : <EyeOffIcon className="size-4"/>}
+        {resumeData.public ? 'Public' : 'Private'}
+      </button>
+
+      <button
+        onClick={Downloadresume}
+        className="flex items-center gap-2 px-6 py-2 text-xs
+                   bg-gradient-to-br from-green-100 to-green-200 text-green-600
+                   rounded-lg ring-green-300 hover:ring"
+      >
+        <DownloadIcon className="size-4"/> Download
+      </button>
+
     </div>
   </div>
-</div>
-  <ResumePreview 
-    data={resumeData} 
-    template={resumeData.templates} 
-    accent_color={resumeData.accent_color} 
-    classes="mx-auto" 
-  />
+
+  {/* ✅ Preview INSIDE */}
+  <div className="sticky top-6">
+    <ResumePreview 
+      data={resumeData} 
+      template={resumeData.template} 
+      accent_color={resumeData.accent_color} 
+      classes="mx-auto"
+    />
+  </div>
+
 </div>
 
 
       </div>
     </div>
    
-    
+    </div>  
   )
 }
+  
 
 export default ResumeBuilder
