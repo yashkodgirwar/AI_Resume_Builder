@@ -38,7 +38,7 @@ const ResumeBuilder = () => {
     education:[],
     projects:[],
     skills:[],
-    templates:"classic",
+    template:"classic",
     accent_color:"#3B82F6",
     public:false,
 });
@@ -125,7 +125,7 @@ const handleshare=()=>{
       const formData =new FormData()
       formData.append("resumeId", resumeId)
       formData.append('resumeData' ,JSON.stringify(updatedResumeData))
-      removeBackground && formData.append("removeBackground",yes);
+      removeBackground && formData.append("removeBackground", "true");
       typeof resumeData.personal_info.image === 'object' && formData.append("image",resumeData.personal_info.image)
           const {data} =await api.put('/api/resumes/update', formData, {headers: {
       Authorization: `Bearer ${token}` }})
@@ -137,7 +137,7 @@ const handleshare=()=>{
 }  }
   return (
     <div>
-    <div className="max-w-7xl mx-auto px-4 py-8">
+    <div className="max-w-7xl mx-auto px-4 py-8 print:hidden">
       <Link to={'/app'} className='inline-flex gap-2 items-center text-slate-500 hover:text-slate-700 transition-all'>
       <ArrowLeftIcon className="size-4" />
         Back to Dashboard
@@ -146,7 +146,7 @@ const handleshare=()=>{
     <div className="max-w-7xl mx-auto">
       <div className="grid lg:grid-cols-12 gap-8">
         { /* left panal-section selector */ }
-        <div className='relative lg:col-span-5 rounded-lg overflow-hidden'>
+        <div className='relative lg:col-span-5 rounded-lg overflow-hidden print:hidden'>
           <div className='bg-white rounded-lg shadow-sm border border-gray-200 p-6 pt-1'>
           {/* progress bar using activeSectionIndex */ }
               <hr className='absolute top-0 right-0 border-2 border-gray-200'/>
@@ -197,20 +197,20 @@ const handleshare=()=>{
                  <ProfessionalSummaryForm data={resumeData.professional_summary} onChange={(data)=>setResumeData((prev)=>({...prev, professional_summary: data}))} />
                 )}
                 {activeSection.id === 'experience' && (
-                  <ExperienceForm data={resumeData.experience} onChange={(data)=>setResumeData((prev)=>({...prev, experience: data}))} />
+                  <ExperienceForm data={resumeData.experience || []} onChange={(data)=>setResumeData((prev)=>({...prev, experience: data}))} />
                 )}
                   {activeSection.id === 'education' && (
-                    <EducationInfo data={resumeData.education} onChange={(data)=>setResumeData((prev)=>({...prev, education: data}))} />
+                    <EducationInfo data={resumeData.education || []} onChange={(data)=>setResumeData((prev)=>({...prev, education: data}))} />
                   )}
                     {activeSection.id === 'projects' && ( 
-                      <ProjectForm data={resumeData.projects} onChange={(data)=>setResumeData((prev)=>({...prev, projects: data}))} />
+                      <ProjectForm data={resumeData.projects || resumeData.project || []} onChange={(data)=>setResumeData((prev)=>({...prev, projects: data}))} />
                     )}
                       {activeSection.id === 'skills' && (
-                        <YourSkill data={resumeData.skills} onChange={(data)=>setResumeData((prev)=>({...prev, skills: data}))} />
+                        <YourSkill data={resumeData.skills || []} onChange={(data)=>setResumeData((prev)=>({...prev, skills: data}))} />
                       )}
               {/* Add similar conditional rendering for other sections like experience, education, projects, skills */}
             </div>
-                   <button onClick={()=>{toast.promise(saveResume,{loading:'saving'})}}className='bg-gradient-to-br from-green-100 to-green-200
+                   <button onClick={saveResume} className='bg-gradient-to-br from-green-100 to-green-200
 ring-green-300 text-green-600 ring hover:ring-green-400
 transition-all rounded-md px-6 py-2 mt-6 text-sm'>
 Save Changes
@@ -221,7 +221,7 @@ Save Changes
 <div className="lg:col-span-7 max-lg:mt-6">
   
   {/* Buttons */}
-  <div className="relative w-full mb-4">
+  <div className="relative w-full mb-4 print:hidden">
     <div className="flex justify-end gap-2">
       
       {resumeData.public && (

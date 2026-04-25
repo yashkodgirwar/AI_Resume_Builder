@@ -22,9 +22,11 @@ const ProfessionalSummaryForm = ({ data, onChange, setResumeData }) => {
     try{
       setisGenerating(true)
       const prompt =`enhance my professional summary "${data}`;
-        const response =await api.post('/api/ai/enhance-pro-sum', {userContent:prompt}, {headers: {
+        const response = await api.post('/api/ai/enhance-pro-sum', {userContent:prompt}, {headers: {
       Authorization: `Bearer ${token}` }})
-      setResumeData(prev=>({...prev,professional_summary: ReportingObserver.data.enhancedContent}))
+      const newSummary = response.data.enhancedcontent;
+      setSummary(newSummary);
+      onChange?.(newSummary);
     }catch(error){
      toast.error(error?.response?.data?.message || error.message)
     }finally{

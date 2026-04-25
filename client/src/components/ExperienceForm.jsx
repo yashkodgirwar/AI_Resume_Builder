@@ -1,11 +1,12 @@
 import { Briefcase, PlusIcon, Trash, Sparkles, Loader2 } from 'lucide-react';
-import React from 'react';
+import React, { useState } from 'react';
 import toast from 'react-hot-toast';
 import { useSelector } from "react-redux";
+import api from '../configs/api';
 
 const ExperienceForm = ({ data, onChange }) => {
   const {token}= useSelector(state => state.auth)
-   const [GeneratingIndex, setGeneratingIndex] = useState(-1) ;
+   const [generatingIndex, setGeneratingIndex] = useState(-1) ;
   const addExperience = () => {
     const newExperience = {
       id: Date.now(),
@@ -45,13 +46,13 @@ const ExperienceForm = ({ data, onChange }) => {
 
     // call your API
     const { data: response } = await api.post(
-      "api/ai/enhance-job-desc",
+      "/api/ai/enhance-job-desc",
       { userContent: prompt },
-      { headers: { Authorization: token } }
+      { headers: { Authorization: `Bearer ${token}` } }
     );
 
     // update the experience with the enhanced content
-    updateExperience(index, "description", response.enhancedContent);
+    updateExperience(index, "description", response.enhancedcontent);
 
   } catch (error) {
     // show error toast if API fails
