@@ -86,10 +86,10 @@ const changeResumeVisibilty=async()=>{
   try{
     const formData =new FormData()
     formData.append("resumeId", resumeId)
-    formData.append("resumeData" ,JSON.stringify({publicc: !resumeData.public}))
-    const {data} =await api.put('/api/resumes/update' +resumeId, {headers: {
+    formData.append("resumeData" ,JSON.stringify({public: !resumeData.public}))
+    const {data} =await api.put('/api/resumes/update', formData, {headers: {
       Authorization: `Bearer ${token}` }})
-      setResumeData({...resumeData,public: !resumeData.public})
+      setResumeData(data.resume)
       toast.success(data.message)
 
   }catch(error){
@@ -138,11 +138,42 @@ const handleshare=()=>{
 }  }
   return (
     <div>
-    <div className="max-w-7xl mx-auto px-4 py-8 print:hidden">
+    <div className="max-w-7xl mx-auto px-4 pt-6 pb-4 print:hidden flex justify-between items-center">
       <Link to={'/app'} className='inline-flex gap-2 items-center text-slate-500 hover:text-slate-700 transition-all'>
       <ArrowLeftIcon className="size-4" />
         Back to Dashboard
       </Link>
+      <div className="flex gap-2">
+        {resumeData.public && (
+          <button
+            className="flex items-center p-2 px-4 gap-2 text-xs
+                       bg-gradient-to-br from-blue-100 to-blue-200 text-blue-600
+                       rounded-lg ring-blue-300 hover:ring"
+            onClick={handleshare}
+          >
+            <Share2Icon className="size-4" /> Share
+          </button>
+        )}
+
+        <button
+          onClick={changeResumeVisibilty}
+          className="flex items-center p-2 px-4 gap-2 text-xs
+                     bg-gradient-to-br from-purple-100 to-purple-200 text-purple-600
+                     rounded-lg ring-purple-300 hover:ring"
+        >
+          {resumeData.public ? <EyeIcon className="size-4"/> : <EyeOffIcon className="size-4"/>}
+          {resumeData.public ? 'Public' : 'Private'}
+        </button>
+
+        <button
+          onClick={Downloadresume}
+          className="flex items-center gap-2 px-6 py-2 text-xs
+                     bg-gradient-to-br from-green-100 to-green-200 text-green-600
+                     rounded-lg ring-green-300 hover:ring"
+        >
+          <DownloadIcon className="size-4"/> Download
+        </button>
+      </div>
     </div>
     <div className="max-w-7xl mx-auto">
       <div className="grid lg:grid-cols-12 gap-8">
@@ -221,50 +252,12 @@ Save Changes
        { /* /right panal-preview */ }
 <div className="lg:col-span-7 max-lg:mt-6">
   
-  {/* Buttons */}
-  <div className="relative w-full mb-4 print:hidden">
-    <div className="flex justify-end gap-2">
-      
-      {resumeData.public && (
-        <button
-          className="flex items-center p-2 px-4 gap-2 text-xs
-                     bg-gradient-to-br from-blue-100 to-blue-200 text-blue-600
-                     rounded-lg ring-blue-300 hover:ring"
-          onClick={handleshare}
-        >
-          <Share2Icon className="size-4" /> Share
-        </button>
-      )}
-
-      <button
-        onClick={changeResumeVisibilty}
-        className="flex items-center p-2 px-4 gap-2 text-xs
-                   bg-gradient-to-br from-purple-100 to-purple-200 text-purple-600
-                   rounded-lg ring-purple-300 hover:ring"
-      >
-        {resumeData.public ? <EyeIcon className="size-4"/> : <EyeOffIcon className="size-4"/>}
-        {resumeData.public ? 'Public' : 'Private'}
-      </button>
-
-      <button
-        onClick={Downloadresume}
-        className="flex items-center gap-2 px-6 py-2 text-xs
-                   bg-gradient-to-br from-green-100 to-green-200 text-green-600
-                   rounded-lg ring-green-300 hover:ring"
-      >
-        <DownloadIcon className="size-4"/> Download
-      </button>
-
-    </div>
-  </div>
-
-  {/* ✅ Preview INSIDE */}
   <div className="sticky top-6">
+    {/* ✅ Preview INSIDE */}
     <ResumePreview 
       data={resumeData} 
       template={resumeData.template} 
       accent_color={resumeData.accent_color} 
-      classes="mx-auto"
     />
   </div>
 

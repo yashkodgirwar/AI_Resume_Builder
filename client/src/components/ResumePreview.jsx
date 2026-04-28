@@ -21,7 +21,7 @@ const ResumePreview = ({data,template,accent_color, classes=""}) => {
     return (
     
   
-  <div className="w-full bg-white shadow-lg border border-gray-200">
+  <div className={`w-full bg-white shadow-lg border border-gray-200 ${classes}`}>
     <div className="w-full bg-white">
       
       <div id="resume-preview" className="w-full">
