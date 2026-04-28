@@ -92,15 +92,29 @@ const EducationInfo = ({ data, onChange }) => {
                   value={education.graduation_date || ""}
                   onChange={(e) => updateEducation(index, "graduation_date", e.target.value)}
                   type="text"
+                  onFocus={(e) => (e.target.type = "date")}
+                  onBlur={(e) => {
+                    if (!e.target.value) e.target.type = "text";
+                  }}
                   className="px-3 py-2 text-sm border rounded-lg"
                   placeholder="Graduation Date"
                 />
-                <input
-                  value={education.gpa || ""}
-                  onChange={(e) => updateEducation(index, "gpa", e.target.value)}
-                  className="px-3 py-2 text-sm border rounded-lg"
-                  placeholder="GPA (Optional)"
-                />      
+                <div className="flex gap-2">
+                  <select
+                    value={education.score_type || "gpa"}
+                    onChange={(e) => updateEducation(index, "score_type", e.target.value)}
+                    className="px-2 py-2 text-sm border rounded-lg bg-white outline-none"
+                  >
+                    <option value="gpa">GPA</option>
+                    <option value="percentage">Percentage</option>
+                  </select>
+                  <input
+                    value={education.gpa || ""}
+                    onChange={(e) => updateEducation(index, "gpa", e.target.value)}
+                    className="px-3 py-2 text-sm border rounded-lg flex-1"
+                    placeholder={education.score_type === "percentage" ? "Percentage" : "GPA"}
+                  />
+                </div>
                   
                 
               </div>

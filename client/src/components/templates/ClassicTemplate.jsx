@@ -140,7 +140,7 @@ const ClassicTemplate = ({ data, accentColor }) => {
                                         {edu.degree} {edu.field && `in ${edu.field}`}
                                     </h3>
                                     <p className="text-gray-700">{edu.institution}</p>
-                                    {edu.gpa && <p className="text-sm text-gray-600">GPA: {edu.gpa}</p>}
+                                    {edu.gpa && <p className="text-sm text-gray-600">{edu.score_type === "percentage" ? "Percentage:" : "GPA:"} {edu.gpa}</p>}
                                 </div>
                                 <div className="text-sm text-gray-600">
                                     <p>{formatDate(edu.graduation_date)}</p>

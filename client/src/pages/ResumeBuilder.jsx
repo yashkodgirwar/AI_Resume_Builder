@@ -21,6 +21,7 @@ import ProfessionalSummaryForm from '../components/ProfessionalSummaryForm';
 import ExperienceForm from '../components/ExperienceForm';
 import EducationInfo from '../components/EducationInfo';
 import ProjectForm from '../components/ProjectForm';
+import toast from 'react-hot-toast';
 
 import YourSkill from '../components/YourSkill';
 import { useSelector } from 'react-redux';
