@@ -38,7 +38,7 @@ const ResumeSchema = new mongoose.Schema({
         profession: { type: String, default: "" },
         email: { type: String, default: "" },
         phone: { type: String, default: "" },
-        loaction: { type: String, default: "" },
+        location: { type: String, default: "" },
         linkedin: { type: String, default: "" },
         website: { type: String, default: "" }
     },
@@ -52,7 +52,7 @@ const ResumeSchema = new mongoose.Schema({
             is_current: { type: Boolean }
         }
     ],
-     project: [
+     projects: [
         {
             name: { type: String  },
             type: { type: String},
@@ -64,9 +64,10 @@ const ResumeSchema = new mongoose.Schema({
         {
             institution: { type: String }, 
             degree: { type: String  },
-            field_of_study: { type: String },
+            field: { type: String },
             graduation_date: { type: String},
             description: { type: String},
+            score_type: { type: String, default: "gpa" },
             gpa: { type: String }
         
 

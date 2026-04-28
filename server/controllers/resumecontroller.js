@@ -14,7 +14,10 @@ export const createResume = async(req,res)=>{
         //create new resume
         const newResume= await Resume.create({userId,title})
         //retrun success message
-        return res.status(201).json({message:"Resume created sucessfully"})
+      return res.status(201).json({
+  message: "Resume created successfully",
+  resume: newResume
+});
     }catch(error){
       return res.status(400).json({message:error.message})
     }
@@ -49,10 +52,14 @@ if (!deleted) {
 
 export const getResumeById =async(req,res)=>{
     try{
-        const userId=req.userId;
-        const{resumeId}=req.body;
-       
-        const resume= await Resume.findOne({userId,resumeId})
+      const userId = req.userId;
+      const { resumeId } = req.params;
+
+const resume = await Resume.findOne({
+  userId,
+  _id: resumeId
+});       
+
         
        if(!resume){
         return res.status(404).json({message:"Resume not Found"})
@@ -97,7 +104,7 @@ const image = req.file;
 
 let resumeDataCopy;
 if(typeof resumeData ==='string'){
-   resumeData=await JSON.parse(resumeData)
+   resumeDataCopy=await JSON.parse(resumeData)
 }else{
   resumeDataCopy=structuredClone(resumeData) // for deep copy
 }
@@ -105,19 +112,20 @@ if(typeof resumeData ==='string'){
 
 if(image){
     const imageBufferdata=fs.createReadStream(image.path);
-    const response = await imagekit.files.upload({
-  file: fs.createReadStream('path/to/file'),
-  fileName: 'resume.jpg',
-  folder:'user-resume',
-  transformation:{
-  pre:'w-300,h-300,fo-face,z-0.75'+
-  (removeBackground ?',e-bgremove': '')
-  }
-});            
-  resumeDataCopy.personal_info.image=response.url
+    const response = await imagekit.upload({
+      file: imageBufferdata,
+      fileName: 'resume.jpg',
+      folder:'user-resume'
+    });
+    
+    let trString = 'w-300,h-300,fo-face,z-0.75';
+    if(removeBackground === 'true'){
+        trString += ',e-bgremove';
+    }
+    resumeDataCopy.personal_info.image = response.url + '?tr=' + trString;
 }
 
-const resume = await Resume. findByIdAndUpdate({userId, _id: resumeId},
+const resume = await Resume.findOneAndUpdate({userId, _id: resumeId},
 resumeDataCopy, {new: true})
 
 return res.status(200). json({message: 'Saved successfully', resume})

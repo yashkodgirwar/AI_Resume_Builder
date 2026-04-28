@@ -13,7 +13,7 @@ export const enhanceProfessionalSummary=async(req,res)=>{
             return res.status(400).json({message:"Missing required fields"})
         }
        const response= await ai.chat.completions.create({
-            model: process.env.OPENAI_MODEL,
+            model: process.env.OPENAI_MODEL || "gemini-2.5-flash",
     messages: [
         {   role: "system",
             content: "You are an expert in resume writing. Your task is to enhance the professional summary of a resume. The summary should be 1-2 sentences also highlighting key skills, experience, and career objectives. Make it compelling and ATS-friendly. and only return text no options or anything else." 
@@ -40,14 +40,14 @@ export const enhanceJobDescription =async(req,res)=>{
             return res.status(400).json({message:"Missing required fields"})
         }
        const response= await ai.chat.completions.create({
-            model: process.env.OPENAI_MODEL,
+            model: process.env.OPENAI_MODEL || "gemini-2.5-flash",
     messages: [
         {   role: "system",
             content:"You are an expert in resume writing. Your task is to enhance the job description of a resume. The job descriptiononly in 1-2 sentence also highlighting key responsibilities and achievements. Use action verbs and quantifiable results where possible. Make it ATS-friendly. and only return text no options or anything else." 
         },
         {
             role: "user",
-            content: useContent,
+            content: userContent,
         },
     ],
         })
@@ -89,7 +89,7 @@ export const uploadresume  =async(req,res)=>{
         profession: { type: String, default: "" },
         email: { type: String, default: "" },
         phone: { type: String, default: "" },
-        loaction: { type: String, default: "" },
+        location: { type: String, default: "" },
         linkedin: { type: String, default: "" },
         website: { type: String, default: "" }
     },
@@ -103,7 +103,7 @@ export const uploadresume  =async(req,res)=>{
             is_current: { type: Boolean }
         }
     ],
-     project: [
+     projects: [
         {
             name: { type: String  },
             type: { type: String},
@@ -115,7 +115,7 @@ export const uploadresume  =async(req,res)=>{
         {
             institution: { type: String }, 
             degree: { type: String  },
-            field_of_study: { type: String },
+            field: { type: String },
             graduation_date: { type: String},
             description: { type: String},
             gpa: { type: String }
@@ -125,7 +125,7 @@ export const uploadresume  =async(req,res)=>{
     ],
        }`
         const response= await ai.chat.completions.create({
-            model: process.env.OPENAI_MODEL,
+            model: process.env.OPENAI_MODEL || "gemini-2.5-flash",
     messages: [
         {   role: "system",
             content: systemPrompt
@@ -135,14 +135,18 @@ export const uploadresume  =async(req,res)=>{
             content: userPrompt,
         },
     ],
-    response_fromat:{type: 'json_object'}
+    response_format:{type: 'json_object'}
 
 
         })
        const extractedata=response.choices[0].message.content;
-       const parsedata=JSON.parse(extractedata)
+       
+       // Clean markdown formatting if present
+       const cleanData = extractedata.replace(/```json/g, '').replace(/```/g, '').trim();
+       const parsedata=JSON.parse(cleanData);
+       
        const newResum=await Resume.create({userId,title,...parsedata})
-        return json({resumeId:newResum._id})
+        return res.json({resumeId:newResum._id})
     }catch(error){
        return res.status(400).json({message:error.message})
     }
