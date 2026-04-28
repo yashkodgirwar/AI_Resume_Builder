@@ -16,7 +16,7 @@ const Preview = () => {
 
   const loadResume = async () => {
   try{
-         const {data} =await api.get('/api/resume/public' + resumeId)
+         const {data} =await api.get(`/api/resumes/public/${resumeId}`)
           setResumeData(data.resume)
 
       
@@ -37,7 +37,7 @@ const Preview = () => {
         <ResumePreview
           data={resumeData}
           template={resumeData.template}
-          accentColor={resumeData.accent_color}
+          accent_color={resumeData.accent_color}
           classes="py-4 bg-white"
         />
       </div>

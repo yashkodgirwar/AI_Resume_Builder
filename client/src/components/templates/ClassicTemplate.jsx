@@ -100,7 +100,7 @@ const ClassicTemplate = ({ data, accentColor }) => {
 
     <ul className="space-y-3">
       {data.projects.map((proj, index) => (
-        <div key={index} className="border-l-3 border-gray-300 pl-6">
+        <div key={index} className="border-l-3 pl-6" style={{ borderColor: accentColor }}>
           
           {/* Project Name */}
           <li className="font-semibold text-gray-800">

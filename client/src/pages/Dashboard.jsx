@@ -74,26 +74,15 @@ navigate(`/app/builder/${data.resume._id}`)
     setisLoading(true)
     try{
       const resumeText = await pdfToText.default(resume)
-//     await api.post('/api/resumes/create', { title, resumeText }, {
-//   headers: {
-//     Authorization: `Bearer ${token}`
-//   }
-// })
-//       setTitle('')
-//       setresume(null)
-//       setShowUploadResume(false)
-//       navigate(`/app/builder/${data.resumeId}`)
-const {data} = await api.post('/api/resumes/create', {title},{
-  headers: { Authorization: `Bearer ${token}` }
-})
 
-// ✅ IMPORTANT
-setAllResumes((prev) => [...prev, data.resume])
+      const { data } = await api.post('/api/ai/upload-resume', { title, resumeText }, {
+        headers: { Authorization: `Bearer ${token}` }
+      })
 
-setTitle('')
-setShowCreateResume(false)
-
-navigate(`/app/builder/${data.resume._id}`)
+      setTitle('')
+      setresume(null)
+      setShowUploadResume(false)
+      navigate(`/app/builder/${data.resumeId}`)
     
     }catch(error){
      setisLoading(false)

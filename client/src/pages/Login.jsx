@@ -98,7 +98,7 @@ const Login = () => {
 
         {/* Forgot */}
         <div className="mt-4 text-left">
-          <button type="button" className="text-sm text-green-500 hover:underline">
+          <button type="button" onClick={() => window.location.href = '/forgot-password'} className="text-sm text-green-500 hover:underline">
             Forget password?
           </button>
         </div>
