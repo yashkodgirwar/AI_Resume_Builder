@@ -64,6 +64,7 @@ const loadExitingResume= async()=>{
 
 const [activeSectionIndex,setActiveSectionIndex]= useState(0); 
 const [removeBackground,setRemoveBackground]= useState(false);
+const [isSaving, setIsSaving] = useState(false);
 
 const section=[
   { id:"personal", name:"Personal Info", icon:User },
@@ -116,8 +117,9 @@ const handleshare=()=>{
   }
 
   const saveResume = async ()=>{
+    setIsSaving(true);
     try{
-      let updatedResumeData =structuredClone(resumeData)
+      let updatedResumeData = JSON.parse(JSON.stringify(resumeData));
       //remove imgae from updatedResumeData
       if(typeof resumeData.personal_info.image === 'object'){
         delete updatedResumeData.personal_info.image
@@ -131,11 +133,54 @@ const handleshare=()=>{
           const {data} =await api.put('/api/resumes/update', formData, {headers: {
       Authorization: `Bearer ${token}` }})
       setResumeData(data.resume)
+      setRemoveBackground(false);
       toast.success(data.message)
 
     }catch(error){
-    console.error("Error saving in resume: ", error)
-}  }
+      console.error("Error saving in resume: ", error)
+      toast.error(error.response?.data?.message || error.message || "Error saving resume")
+    } finally {
+      setIsSaving(false);
+    }
+  }
+
+  const handleImmediateImageSave = async (imageFile, doRemoveBg) => {
+    setIsSaving(true);
+    setRemoveBackground(doRemoveBg);
+
+    try {
+      let updatedResumeData = JSON.parse(JSON.stringify(resumeData));
+      if (typeof updatedResumeData.personal_info.image === 'object') {
+        delete updatedResumeData.personal_info.image;
+      }
+      
+      const formData = new FormData();
+      formData.append("resumeId", resumeId);
+      formData.append('resumeData', JSON.stringify(updatedResumeData));
+      if (doRemoveBg) formData.append("removeBackground", "true");
+      formData.append("image", imageFile);
+
+      const { data } = await api.put('/api/resumes/update', formData, {
+        headers: { Authorization: `Bearer ${token}` }
+      });
+
+      // If AI Enhancement is selected, force a 50-second delay before resolving
+      // so the ImageKit background processing has time to finish.
+      if (doRemoveBg) {
+        await new Promise(resolve => setTimeout(resolve, 50000));
+      }
+
+      setResumeData(data.resume);
+      setRemoveBackground(false);
+      toast.success("Image processed successfully!");
+    } catch (error) {
+      console.error("Error processing image: ", error);
+      toast.error(error.response?.data?.message || "Error processing image");
+    } finally {
+      setIsSaving(false);
+    }
+  };
+
   return (
     <div>
     <div className="max-w-7xl mx-auto px-4 pt-6 pb-4 print:hidden flex justify-between items-center">
@@ -223,7 +268,14 @@ const handleshare=()=>{
             {/* form  content*/ }
             <div className='space-y-6'>
               {activeSection.id === 'personal' && (
-                 <PersonalinfoForm data={resumeData.personal_info} onChange={(data)=>setResumeData((prev)=>({...prev, personal_info: data}))} removeBackground={removeBackground} setremoveBackground={setRemoveBackground} />
+                 <PersonalinfoForm 
+                   data={resumeData.personal_info} 
+                   onChange={(data)=>setResumeData((prev)=>({...prev, personal_info: data}))} 
+                   removeBackground={removeBackground} 
+                   setremoveBackground={setRemoveBackground} 
+                   isSaving={isSaving} 
+                   onSaveImmediate={handleImmediateImageSave}
+                 />
                 )}
               {activeSection.id === 'Summary' && (
                  <ProfessionalSummaryForm data={resumeData.professional_summary} onChange={(data)=>setResumeData((prev)=>({...prev, professional_summary: data}))} />
@@ -252,7 +304,7 @@ Save Changes
        { /* /right panal-preview */ }
 <div className="lg:col-span-7 max-lg:mt-6">
   
-  <div className="sticky top-6">
+  <div className="sticky top-6 print:static">
     {/* ✅ Preview INSIDE */}
     <ResumePreview 
       data={resumeData} 

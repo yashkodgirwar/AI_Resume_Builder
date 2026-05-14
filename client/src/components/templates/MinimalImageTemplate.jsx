@@ -15,7 +15,7 @@ const MinimalImageTemplate = ({ data, accentColor }) => {
         <div className="max-w-5xl mx-auto bg-white text-zinc-800">
             <div className="grid grid-cols-3">
 
-                <div className="col-span-1  py-10">
+                <div className="col-span-1 pt-4 pb-8">
                     {/* Image */}
                     {data.personal_info?.image && typeof data.personal_info.image === 'string' ? (
                         <div className="mb-6">
@@ -31,7 +31,7 @@ const MinimalImageTemplate = ({ data, accentColor }) => {
                 </div>
 
                 {/* Name + Title */}
-                <div className="col-span-2 flex flex-col justify-center py-10 px-8">
+                <div className="col-span-2 flex flex-col justify-center pt-4 pb-8 px-8">
                     <h1 className="text-4xl font-bold text-zinc-700 tracking-widest">
                         {data.personal_info?.full_name || "Your Name"}
                     </h1>
