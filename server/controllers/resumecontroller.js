@@ -112,15 +112,15 @@ if(typeof resumeData ==='string'){
 
 if(image){
     const imageBufferdata=fs.createReadStream(image.path);
-    const response = await imagekit.upload({
+    const response = await imagekit.files.upload({
       file: imageBufferdata,
-      fileName: 'resume.jpg',
+      fileName: 'resume.png',
       folder:'user-resume'
     });
     
-    let trString = 'w-300,h-300,fo-face,z-0.75';
+    let trString = 'w-300,h-300,fo-face';
     if(removeBackground === 'true'){
-        trString += ',e-bgremove';
+        trString = 'e-bgremove:' + trString + ',f-png';
     }
     resumeDataCopy.personal_info.image = response.url + '?tr=' + trString;
 }

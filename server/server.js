@@ -1,7 +1,6 @@
 import 'dotenv/config'; 
 
 
-console.log("ENV TEST:", process.env.IMAGEKIT_PRIVATE_KEY);
 
 import express from 'express';
 import cors from 'cors';
